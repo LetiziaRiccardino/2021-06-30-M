@@ -7,6 +7,7 @@ package it.polito.tdp.genes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.genes.model.Adiacenza;
 import it.polito.tdp.genes.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +39,37 @@ public class FXMLController {
 
     @FXML
     void doContaArchi(ActionEvent event) {
+    	
+      	Double min= model.getPesoMin();
+    	double max= model.getPesoMax();
+    	double soglia;
+    	try {
+    		soglia= Double.parseDouble(txtSoglia.getText());
+    	}catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		txtResult.setText("Inserire valore numerico compreso tra i valori minimo e massimo "+min+" "+max);
+    		return;
+    	}
+    	
+    	if(soglia<min || soglia>max) {
+    		txtResult.setText("Inserire valore numerico compreso tra i valori minimo e massimo "+min+" "+max);
+    		return;
+    	}
+    	
+//    	txtResult.appendText("Archi peso <S: \n");
+//    	for(Adiacenza a: model.getContaArchiMinore(soglia)) {
+//    		txtResult.appendText(a.toString()+"\n");
+//    	}
+//    	txtResult.appendText("Archi peso >S: \n");
+//    	for(Adiacenza a: model.getContaArchiMaggiore(soglia)) {
+//    		txtResult.appendText(a.toString()+"\n");
+//    	}
+    	
+    	txtResult.appendText("Archi peso <S: "+model.getContaArchiMinore(soglia).size()+"; ");
+    	txtResult.appendText("Archi peso >S: "+model.getContaArchiMaggiore(soglia).size()+"\n");
+
+
+    	
 
     }
 
@@ -57,6 +89,11 @@ public class FXMLController {
 
 	public void setModel(Model model) {
 		this.model = model ;
+		
+		model.creaGrafo();
+		txtResult.appendText("Grafo creato: #vertici "+model.getNVertici()+" #archi "+model.getNArchi()+"\n"+
+		"Peso minimo: "+model.getPesoMin()+" Peso massimo: "+model.getPesoMax()+"\n");
+		
 		
 	}
 }
